@@ -1,0 +1,12 @@
+{
+	"calibration_path" : "res://godottd/calibration/",
+	"calibration_file" : "Calibration_OSG.json",
+	"server_ip" : "localhost",
+	"server_port" : 55555,
+	"server_max_clients" : 50,
+	"vrpn_system" : "DTrack",
+	"vrpn_ip" : "localhost",
+	"vrpn_port" : 3883,
+	"scene_path" : "",
+	"scene_default" : ""
+}

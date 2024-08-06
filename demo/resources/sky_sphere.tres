@@ -1,0 +1,8 @@
+[gd_resource type="SphereMesh" format=3 uid="uid://s7cg3bj8w17p"]
+
+[resource]
+flip_faces = true
+radius = 400.0
+height = 800.0
+radial_segments = 32
+rings = 16

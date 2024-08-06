@@ -1,0 +1,6 @@
+# Scons
+.sconsign.dblite
+*.os
+
+# Libs
+*.so

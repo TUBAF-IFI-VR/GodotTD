@@ -1,0 +1,86 @@
+[gd_scene load_steps=2 format=3 uid="uid://0fg5eaejtaw4"]
+
+[ext_resource type="Script" path="res://ui/menu_debug.gd" id="1_rq6lv"]
+
+[node name="Menu" type="PanelContainer"]
+offset_right = 152.0
+offset_bottom = 101.0
+script = ExtResource("1_rq6lv")
+
+[node name="MenuLayout" type="GridContainer" parent="."]
+layout_mode = 2
+columns = 2
+
+[node name="Warping" type="CheckButton" parent="MenuLayout"]
+layout_mode = 2
+button_pressed = true
+text = "Warping"
+
+[node name="Alphamasks" type="CheckButton" parent="MenuLayout"]
+layout_mode = 2
+button_pressed = true
+text = "Alphamasks"
+
+[node name="Headtracking" type="CheckButton" parent="MenuLayout"]
+layout_mode = 2
+text = "Headtracking"
+
+[node name="Audio" type="CheckButton" parent="MenuLayout"]
+layout_mode = 2
+text = "Audio"
+
+[node name="VSeparator" type="VSeparator" parent="MenuLayout"]
+layout_mode = 2
+
+[node name="VSeparator2" type="VSeparator" parent="MenuLayout"]
+layout_mode = 2
+
+[node name="Sky" type="CheckButton" parent="MenuLayout"]
+layout_mode = 2
+text = "Sky"
+
+[node name="SSAO" type="CheckButton" parent="MenuLayout"]
+layout_mode = 2
+button_pressed = true
+text = "SSAO"
+
+[node name="GlobalIlumination" type="CheckButton" parent="MenuLayout"]
+layout_mode = 2
+text = "Global Illumination"
+
+[node name="Glow" type="CheckButton" parent="MenuLayout"]
+layout_mode = 2
+text = "Glow"
+
+[node name="Volumetric Fog" type="CheckButton" parent="MenuLayout"]
+layout_mode = 2
+button_pressed = true
+text = "Volumetric Fog"
+
+[node name="VSeparator3" type="VSeparator" parent="MenuLayout"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MenuLayout"]
+layout_mode = 2
+text = "Ambient light:"
+
+[node name="AmbientLight" type="CheckBox" parent="MenuLayout"]
+layout_mode = 2
+button_pressed = true
+text = "enabled"
+
+[node name="HSlider" type="HSlider" parent="MenuLayout"]
+layout_mode = 2
+max_value = 2.0
+step = 0.1
+value = 1.0
+
+[node name="VSeparator4" type="VSeparator" parent="MenuLayout"]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="MenuLayout"]
+layout_mode = 2
+text = "Shading:"
+
+[node name="DebugDraw" type="OptionButton" parent="MenuLayout"]
+layout_mode = 2

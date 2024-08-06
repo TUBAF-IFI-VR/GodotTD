@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://do6clqm7tqr4c"]
+
+[ext_resource type="Material" uid="uid://c0mcprwxf7xfn" path="res://resources/skysphere_mat.material" id="2_utcmr"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_tcd6l"]
+flip_faces = true
+radius = 400.0
+height = 800.0
+radial_segments = 32
+rings = 16
+
+[node name="SkySphere" type="MeshInstance3D"]
+mesh = SubResource("SphereMesh_tcd6l")
+surface_material_override/0 = ExtResource("2_utcmr")

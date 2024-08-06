@@ -1,0 +1,25 @@
+[gd_resource type="Environment" load_steps=4 format=3 uid="uid://dw2oc3bdiq2w1"]
+
+[ext_resource type="Shader" path="res://shader/sky_blank.gdshader" id="1_7fwu2"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_g702k"]
+shader = ExtResource("1_7fwu2")
+shader_parameter/color = Color(0.3, 0.3, 0.33, 1)
+
+[sub_resource type="Sky" id="Sky_6xhs3"]
+sky_material = SubResource("ShaderMaterial_g702k")
+
+[resource]
+background_mode = 2
+sky = SubResource("Sky_6xhs3")
+ambient_light_source = 2
+ambient_light_color = Color(0.5, 0.5, 0.5, 1)
+tonemap_white = 8.0
+ssao_enabled = true
+sdfgi_read_sky_light = false
+sdfgi_energy = 3.0
+glow_normalized = true
+glow_bloom = 0.2
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.02
+volumetric_fog_albedo = Color(0.494118, 0.494118, 0.494118, 1)

@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://t82i00wig7iw"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_22v0i"]
+shading_mode = 0
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_7imgr"]
+material = SubResource("StandardMaterial3D_22v0i")
+radius = 0.02
+height = 0.04
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_qdpfb"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/sync = true
+properties/0/watch = false
+
+[node name="DebugPoint" type="MeshInstance3D"]
+mesh = SubResource("SphereMesh_7imgr")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_qdpfb")

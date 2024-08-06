@@ -1,0 +1,8 @@
+[configuration]
+
+entry_symbol = "godottd_library_init"
+compatibility_minimum = 4.1
+
+[libraries]
+
+linux.x86_64="res://bin/libgodottd.linux.template_debug.x86_64.so"

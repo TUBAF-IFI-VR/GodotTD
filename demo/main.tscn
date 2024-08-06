@@ -1,0 +1,74 @@
+[gd_scene load_steps=10 format=3 uid="uid://ckc6kqsg81tw"]
+
+[ext_resource type="Script" path="res://godottd/scripts/tdroot.gd" id="1_rni0k"]
+[ext_resource type="Material" uid="uid://rooqpve15d75" path="res://godottd/resources/cave_viewport.material" id="2_e0ihk"]
+[ext_resource type="Script" path="res://godottd/scripts/vrpn_server.gd" id="3_udjgb"]
+[ext_resource type="Script" path="res://godottd/scripts/cave_camera.gd" id="5_ywfon"]
+[ext_resource type="PackedScene" uid="uid://do6clqm7tqr4c" path="res://scenes/skysphere.tscn" id="6_7cmny"]
+[ext_resource type="Environment" uid="uid://dw2oc3bdiq2w1" path="res://resources/sky_blank.tres" id="6_u3x5q"]
+[ext_resource type="PackedScene" uid="uid://cgp4opmu6t6km" path="res://input/flystick.tscn" id="7_k2ted"]
+[ext_resource type="PackedScene" uid="uid://0fg5eaejtaw4" path="res://ui/menu_debug.tscn" id="8_xeqp5"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_ayfd8"]
+properties/0/path = NodePath("TDOrigin/Flystick:position")
+properties/0/spawn = false
+properties/0/sync = true
+properties/0/watch = false
+properties/1/path = NodePath("TDOrigin/Flystick:rotation")
+properties/1/spawn = false
+properties/1/sync = true
+properties/1/watch = false
+
+[node name="TDRoot" type="Node3D"]
+script = ExtResource("1_rni0k")
+
+[node name="ViewportContainer" type="SubViewportContainer" parent="."]
+material = ExtResource("2_e0ihk")
+
+[node name="Viewport" type="SubViewport" parent="ViewportContainer"]
+handle_input_locally = false
+msaa_3d = 2
+mesh_lod_threshold = 0.0
+scaling_3d_mode = 1
+audio_listener_enable_2d = true
+audio_listener_enable_3d = true
+positional_shadow_atlas_size = 8192
+size = Vector2i(1920, 1080)
+render_target_update_mode = 4
+
+[node name="SceneRoot" type="Node3D" parent="ViewportContainer/Viewport"]
+
+[node name="VRPNServer" type="VRPNController" parent="ViewportContainer/Viewport/SceneRoot"]
+script = ExtResource("3_udjgb")
+
+[node name="Spawn" type="Node3D" parent="ViewportContainer/Viewport/SceneRoot"]
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="ViewportContainer/Viewport/SceneRoot"]
+_spawnable_scenes = PackedStringArray("res://scenes/debug_point.tscn")
+spawn_path = NodePath("../Spawn")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="ViewportContainer/Viewport/SceneRoot"]
+replication_config = SubResource("SceneReplicationConfig_ayfd8")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="ViewportContainer/Viewport/SceneRoot"]
+environment = ExtResource("6_u3x5q")
+
+[node name="TDOrigin" type="Node3D" parent="ViewportContainer/Viewport/SceneRoot"]
+script = ExtResource("5_ywfon")
+
+[node name="Camera" type="Camera3D" parent="ViewportContainer/Viewport/SceneRoot/TDOrigin"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+size = 3.0
+far = 500.0
+
+[node name="SkySphere" parent="ViewportContainer/Viewport/SceneRoot/TDOrigin" instance=ExtResource("6_7cmny")]
+visible = false
+
+[node name="Flystick" parent="ViewportContainer/Viewport/SceneRoot/TDOrigin" instance=ExtResource("7_k2ted")]
+id = 18
+
+[node name="Menu" parent="." instance=ExtResource("8_xeqp5")]
+
+[connection signal="analog_changed" from="ViewportContainer/Viewport/SceneRoot/VRPNServer" to="ViewportContainer/Viewport/SceneRoot/VRPNServer" method="_on_vrpn_controller_analog_changed"]
+[connection signal="button_pressed" from="ViewportContainer/Viewport/SceneRoot/VRPNServer" to="ViewportContainer/Viewport/SceneRoot/VRPNServer" method="_on_vrpn_controller_button_pressed"]
+[connection signal="tracker_changed" from="ViewportContainer/Viewport/SceneRoot/VRPNServer" to="ViewportContainer/Viewport/SceneRoot/VRPNServer" method="_on_vrpn_controller_tracker_changed"]

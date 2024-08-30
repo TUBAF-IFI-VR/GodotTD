@@ -61,11 +61,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 size = 3.0
 far = 500.0
 
-[node name="SkySphere" parent="ViewportContainer/Viewport/SceneRoot/TDOrigin" instance=ExtResource("6_7cmny")]
-visible = false
-
 [node name="Flystick" parent="ViewportContainer/Viewport/SceneRoot/TDOrigin" instance=ExtResource("7_k2ted")]
 id = 18
+
+[node name="RemoteTransform3D" type="RemoteTransform3D" parent="ViewportContainer/Viewport/SceneRoot/TDOrigin"]
+remote_path = NodePath("../SkySphere")
+update_rotation = false
+update_scale = false
+
+[node name="SkySphere" parent="ViewportContainer/Viewport/SceneRoot/TDOrigin" instance=ExtResource("6_7cmny")]
+top_level = true
+visible = false
 
 [node name="Menu" parent="." instance=ExtResource("8_xeqp5")]
 

@@ -1,8 +1,8 @@
 shader_type spatial;
 render_mode unshaded;
 
-uniform vec3 color_sky : source_color = vec3(0.3, 0.4, 0.6);
-uniform vec3 color_horizon : source_color = vec3(0.46, 0.52, 0.6);
+uniform vec3 color_sky : source_color = vec3(0.5, 0.6, 0.8);
+uniform vec3 color_horizon : source_color = vec3(0.66, 0.72, 0.8);
 
 uniform sampler2D noise_color : hint_default_black;
 uniform sampler2D noise_cloud : hint_default_black;
@@ -21,5 +21,5 @@ void fragment() {
 	
 	color_upper *= noise;
 	
-	ALBEDO = mix(color_upper, vec3(0.65), clouds);
+	ALBEDO = mix(color_upper, vec3(0.8), clouds);
 }

@@ -3,8 +3,9 @@ extends VRPNController
 class_name VRPNServer
 
 ## Subscriber management
+# TODO: merge device tracking and other trackers?
 var devices : Dictionary = {}
-var head_devices : Dictionary = {}
+var tracker : Dictionary = {}
 var sub_input_analog = []
 var sub_input_buttons = []
 
@@ -25,15 +26,6 @@ func _ready():
 		print("Initialize tracking...")
 		self.init(GodotTD.config["vrpn_system"], GodotTD.config["vrpn_ip"], GodotTD.config["vrpn_port"])
 		
-		# We add two goggles for headtracking
-		var headtrack = TrackingDevice.new()
-		headtrack.id = 0	# primary
-		register_head_device(headtrack)
-		
-		headtrack = TrackingDevice.new()
-		headtrack.id = 14	# secondary (backup goggles)
-		register_head_device(headtrack)
-		
 		self.poll()
 	else:
 		# Clients don't have to manage VRPN events
@@ -47,8 +39,8 @@ func _process(_delta):
 func register_device(device : TrackingDevice):
 	devices[device.id] = device
 	
-func register_head_device(device : TrackingDevice):
-	head_devices[device.id] = device
+func register_tracker(device : TrackingDevice):
+	tracker[device.id] = device
 	
 func register_input_analog(device : TrackingDevice):
 	sub_input_analog.append(device)
@@ -105,12 +97,10 @@ func _on_vrpn_controller_tracker_changed(sensor, tracker_pos, tracker_quat):
 	var temp_quat = Quaternion(tracker_quat.x, tracker_quat.z, -tracker_quat.y, tracker_quat.w)
 	var d : TrackingDevice = null
 	
-	# Trigger frustum update
-	# Currently Origin tracking devices are competing
-	if head_devices.has(sensor) and GodotTD.headtracking:
-		var target = (Vector3(0,0,-1) * temp_quat.inverse()).normalized()
-		temp_pos -= 0.1*target
-		GodotTD.tiled_display.update_camera(temp_pos)
+	# Trigger passive trackers
+	if tracker.has(sensor):
+		d = tracker[sensor]
+		d.update_transform(temp_pos, offset, temp_quat)
 	
 	# Notify subscribing devices
 	if devices.has(sensor):

@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://ckc6kqsg81tw"]
+[gd_scene load_steps=11 format=3 uid="uid://ckc6kqsg81tw"]
 
 [ext_resource type="Script" path="res://godottd/scripts/tdroot.gd" id="1_rni0k"]
 [ext_resource type="Material" uid="uid://rooqpve15d75" path="res://godottd/resources/cave_viewport.material" id="2_e0ihk"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://do6clqm7tqr4c" path="res://scenes/skysphere.tscn" id="6_7cmny"]
 [ext_resource type="Environment" uid="uid://dw2oc3bdiq2w1" path="res://resources/sky_blank.tres" id="6_u3x5q"]
 [ext_resource type="PackedScene" uid="uid://cgp4opmu6t6km" path="res://input/flystick.tscn" id="7_k2ted"]
+[ext_resource type="Script" path="res://input/scripts/headtracker.gd" id="8_6drw7"]
 [ext_resource type="PackedScene" uid="uid://0fg5eaejtaw4" path="res://ui/menu_debug.tscn" id="8_xeqp5"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_ayfd8"]
@@ -72,6 +73,14 @@ update_scale = false
 [node name="SkySphere" parent="ViewportContainer/Viewport/SceneRoot/TDOrigin" instance=ExtResource("6_7cmny")]
 top_level = true
 visible = false
+
+[node name="Headtracker1" type="Node3D" parent="ViewportContainer/Viewport/SceneRoot/TDOrigin"]
+script = ExtResource("8_6drw7")
+id = 0
+
+[node name="Headtracker2" type="Node3D" parent="ViewportContainer/Viewport/SceneRoot/TDOrigin"]
+script = ExtResource("8_6drw7")
+id = 14
 
 [node name="Menu" parent="." instance=ExtResource("8_xeqp5")]
 

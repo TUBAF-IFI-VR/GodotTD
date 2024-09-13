@@ -1,5 +1,7 @@
 extends TrackingDevice
 
+class_name Flystick
+
 var vrpn : VRPNServer = null
 var local_direction : Vector3 = Vector3(0.0, 0.0, -1.0)
 var speed = 1.0

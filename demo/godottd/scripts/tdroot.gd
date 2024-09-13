@@ -59,6 +59,8 @@ func _init():
 	var args = OS.get_cmdline_args()
 	var px = 0
 	var py = 0
+	
+	# TODO: remove resolution from calibration formula
 	var wx = 1920
 	var wy = 1080
 	
@@ -132,18 +134,18 @@ func _ready():
 	else:
 		$Menu.visible = false
 		
-		aspect = calibration.sizeV/calibration.size
+		aspect = calibration.frustum_size.y/calibration.frustum_size.x
 		$ViewportContainer/Viewport.size = Vector2(window_width, ceil(window_width*aspect))
 		
 		# Some output for debugging
-		print("calib size, center, near:", calibration.size, calibration.center, calibration.near)
-		print("calib offset, scale:", calibration.offset, calibration.scale)
-		print("viewport original:", $ViewportContainer/Viewport.size)
+		print("frustum size, offset, near: ", calibration.frustum_size, ", ", calibration.frustum_offset, ", ", calibration.near)
+		print("projection offset, scale: ", calibration.proj_offset, ", ", calibration.scale)
+		print("viewport original: ", $ViewportContainer/Viewport.size)
 		
-		# Temporary workaround (gray pixel line at bottom)
+		# TODO: Temporary workaround (gray pixel line at bottom)
 		if $ViewportContainer/Viewport.size.y == 1079:
 			$ViewportContainer/Viewport.size.y = 1080
-		print("viewport new:", $ViewportContainer/Viewport.size)
+		print("viewport new: ", $ViewportContainer/Viewport.size)
 		
 		# Load alphamask and apply all values to the shader
 		var alphamask = calibration.load_alphamask(config["calibration_path"])
@@ -152,12 +154,12 @@ func _ready():
 		material.set_shader_parameter("Hx", calibration.get_Hx())
 		material.set_shader_parameter("Hy", calibration.get_Hy())
 		material.set_shader_parameter("F", calibration.get_F())
-		material.set_shader_parameter("offset", calibration.offset)
+		material.set_shader_parameter("offset", calibration.proj_offset)
 		material.set_shader_parameter("scale", calibration.scale)
 		material.set_shader_parameter("alphamask", alphamask)
 
-		camera.rotate_y(calibration.camera_angle.y)
-		camera.rotation.x = calibration.camera_angle.x
+		camera.rotate_y(calibration.camera_rotation.y)
+		camera.rotation.x = calibration.camera_rotation.x
 		
 		# Finally setup the initial camera frustum
 		update_frustum()
@@ -210,6 +212,7 @@ func _ready():
 # We check for network status periodically
 func _process(_delta):
 	# The server listens for control events via TCP 
+	# TODO: modernize legacy event message system
 	if is_server:
 		# New event message available
 		if server.is_connection_available():
@@ -327,13 +330,13 @@ func load_scene(scene_name:String):
 
 # Convert calibration parameters to match Godot's frustum camera settings
 func update_frustum():
-	eye_dir = Vector3(calibration.center.x, calibration.center.y, -calibration.near).normalized()
+	eye_dir = Vector3(calibration.frustum_offset.x, calibration.frustum_offset.y, -calibration.near).normalized()
 	eye_dir = (camera.transform * eye_dir).normalized()
 	
 	camera.projection = Camera3D.PROJECTION_FRUSTUM
 	camera.keep_aspect = Camera3D.KEEP_HEIGHT
 	
-	camera.set_frustum(calibration.size*2.0*aspect, calibration.center, calibration.near, 500.0)
+	camera.set_frustum(calibration.frustum_size.x*2.0*aspect, calibration.frustum_offset, calibration.near, 500.0)
 
 ## -----------------------------------------------------------
 ## Events synchronized via RPC calls

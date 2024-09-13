@@ -19,13 +19,12 @@ var projector_id : int =-1
 var eye : Vector3
 var eye_default : Vector3
 
-var center : Vector2
-var size : float
-var sizeV : float
+var frustum_offset : Vector2
+var frustum_size : Vector2
 var near : float
-var offset : Vector2
+var proj_offset : Vector2
 var scale : Vector2
-var camera_angle : Vector3
+var camera_rotation : Vector3
 
 # Helper function to get Vector3 from JSON arrays
 func to_vector3(array : Array) -> Vector3:
@@ -57,17 +56,19 @@ func calculate_frustum():
 	
 	# We focus on a point on the screen perpendicular to the viewer
 	# All frusta will be shifted related to this focus point
+	# TODO: generalization of camera rotation
 	# TODO: generalization of near plane for other tiled displays
+	# X-SITE setup: projectors 0-11 left, 12-17 right, 18-23 front, 24 floor
 	if projector_id < 12:
 		wall_focus.x = (tl.z - eye.z) / wall["size"][0]
-		camera_angle.y = PI/2
+		camera_rotation.y = PI/2
 	elif projector_id < 18:
 		wall_focus.x = (eye.z - tl.z) / wall["size"][0]
-		camera_angle.y = -PI/2
+		camera_rotation.y = -PI/2
 	elif projector_id < 24:
 		wall_focus.x = (eye.x - tl.x) / wall["size"][0]
 	elif projector_id == 24:
-		camera_angle.x = -PI/2
+		camera_rotation.x = -PI/2
 		wall_focus.x = (eye.x - tl.x) / wall["size"][0]
 		wall_focus.y = (1.0 - (eye.z - tl.z) / wall["size"][1]) - 0.5
 	
@@ -80,15 +81,16 @@ func calculate_frustum():
 	var bottom = p3.y
 	if p4.y > bottom: bottom = p4.y
 	
-	offset = Vector2(left, top)
+	# Transform frustum corners into Godot's frustum camera parameters
+	proj_offset = Vector2(left, top)
 	scale = Vector2(right-left, bottom-top)
 	
-	
-	center = Vector2(0.5*(right+left)-wall_focus.x, 0.5-0.5*(top+bottom)-wall_focus.y)
+	# TODO: optimize parameter conversion!
+	frustum_offset = Vector2(0.5*(right+left)-wall_focus.x, 0.5-0.5*(top+bottom)-wall_focus.y)
 	#print(center, width, height)
-	center = center * Vector2(width, height)
-	size = 0.5*(right-left)*width
-	sizeV = 0.5*(bottom-top)*height;
+	frustum_offset = frustum_offset * Vector2(width, height)
+	frustum_size.x = 0.5*(right-left)*width
+	frustum_size.y = 0.5*(bottom-top)*height;
 	
 	# TODO: generalization of near plane for other tiled displays
 	if projector_id < 12:

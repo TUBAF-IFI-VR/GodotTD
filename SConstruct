@@ -14,6 +14,7 @@ env = SConscript("godot-cpp/SConstruct")
 
 # tweak this if you want to use different folders, or more folders, to store your source code in.
 env.Append(CPPPATH=["godottd-extension/"])
+env.Append(CCFLAGS=["-fexceptions"])
 env.Append(LIBPATH=["godottd-extension/lib/"])
 env.Append(LIBS=["libvrpn.a","libquat.a"])
 sources = Glob("godottd-extension/*.cpp")

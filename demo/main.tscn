@@ -72,7 +72,6 @@ update_scale = false
 
 [node name="SkySphere" parent="ViewportContainer/Viewport/SceneRoot/TDOrigin" instance=ExtResource("6_7cmny")]
 top_level = true
-visible = false
 
 [node name="Headtracker1" type="Node3D" parent="ViewportContainer/Viewport/SceneRoot/TDOrigin"]
 script = ExtResource("8_6drw7")

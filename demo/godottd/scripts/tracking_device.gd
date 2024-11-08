@@ -22,7 +22,7 @@ func update_button(button : int, pressed : bool):
 	buttons[button] = pressed
 	button_changed.emit(button, pressed)
 
-func update_transform(pos : Vector3, offset : Vector3, quat : Quaternion):
+func update_transform(pos : Vector3, quat : Quaternion):
 	position = pos
 	quaternion = quat
 	moved.emit()

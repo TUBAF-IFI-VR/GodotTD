@@ -55,17 +55,20 @@ func update_button(button : int, pressed : bool):
 				
 		# Change speed
 		Buttons.Option1:
-			speed = 1.0;
+			speed = 1.0
 		Buttons.Option2:
-			speed = 2.0;
+			speed = 2.0
 		Buttons.Option3:
-			speed = 4.0;
+			speed = 4.0
 		Buttons.Option4:
-			speed = 8.0;
+			speed = 8.0
+			
+		Buttons.Thumbstick:
+			$RayCast3D.click(pressed)
 
 # Flystick moved, update panning if necessary
-func update_transform(pos : Vector3, offset : Vector3, quat : Quaternion):
-	super(pos, offset, quat)
+func update_transform(pos : Vector3, quat : Quaternion):
+	super(pos, quat)
 	
 	local_direction = Vector3(0.0, 0.0, -1.0) * quat.inverse()
 	vrpn.update_pan(quaternion)

@@ -13,8 +13,8 @@ func _ready():
 		vrpn.register_device(self)
 
 # Tracker moved, update origin if required
-func update_transform(pos : Vector3, offset : Vector3, quat : Quaternion):
-	super(pos, offset, quat)
+func update_transform(pos : Vector3, quat : Quaternion):
+	super(pos, quat)
 	
 	# Currently origin tracking devices are competing
 	if GodotTD.headtracking:

@@ -100,10 +100,10 @@ func _on_vrpn_controller_tracker_changed(sensor, tracker_pos, tracker_quat):
 	# Trigger passive trackers
 	if tracker.has(sensor):
 		d = tracker[sensor]
-		d.update_transform(temp_pos, offset, temp_quat)
+		d.update_transform(temp_pos, temp_quat)
 	
 	# Notify subscribing devices
 	if devices.has(sensor):
 		d = devices[sensor]
-		d.update_transform(temp_pos, offset, temp_quat)
+		d.update_transform(temp_pos, temp_quat)
 		

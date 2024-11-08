@@ -33,9 +33,10 @@ func _get_headtracking():
 func _init():
 	var file = FileAccess.open(config_file, FileAccess.READ)
 	if file == null:
-		print("Failed to read configuration file '"+config_file+"'!")
+		print("Warning: The config file '"+config_file+"' does not exist!")
+		print("\tYou can ignore this warning if you are testing your scene locally.")
 		return
-	
+
 	var json = JSON.new()
 	json.parse(file.get_as_text())
 	config = json.data

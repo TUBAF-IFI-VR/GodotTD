@@ -1,5 +1,6 @@
 #include "VRPNController.h"
 #include <sstream>
+#include <iostream>
 
 using namespace godot;
 

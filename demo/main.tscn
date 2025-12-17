@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://ckc6kqsg81tw"]
+[gd_scene load_steps=17 format=3 uid="uid://ckc6kqsg81tw"]
 
 [ext_resource type="Script" uid="uid://daaheyqvxvja8" path="res://godottd/scripts/tdroot.gd" id="1_rni0k"]
 [ext_resource type="Material" uid="uid://rooqpve15d75" path="res://godottd/resources/cave_viewport.material" id="2_e0ihk"]
@@ -17,6 +17,24 @@ properties/0/replication_mode = 1
 properties/1/path = NodePath("TDOrigin/Flystick:rotation")
 properties/1/spawn = false
 properties/1/replication_mode = 1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kek77"]
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_4c57u"]
+material = SubResource("StandardMaterial3D_kek77")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_efxa6"]
+albedo_color = Color(0, 1, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_dg77c"]
+material = SubResource("StandardMaterial3D_efxa6")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ycdy4"]
+albedo_color = Color(0, 0, 1, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_w48qg"]
+material = SubResource("StandardMaterial3D_ycdy4")
 
 [node name="TDRoot" type="Node3D"]
 script = ExtResource("1_rni0k")
@@ -78,6 +96,20 @@ id = 0
 [node name="Headtracker2" type="Node3D" parent="ViewportContainer/Viewport/SceneRoot/TDOrigin"]
 script = ExtResource("8_6drw7")
 id = 14
+
+[node name="Testobjects" type="Node3D" parent="ViewportContainer/Viewport/SceneRoot"]
+
+[node name="BoxRed" type="MeshInstance3D" parent="ViewportContainer/Viewport/SceneRoot/Testobjects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, -2)
+mesh = SubResource("BoxMesh_4c57u")
+
+[node name="BoxGreen" type="MeshInstance3D" parent="ViewportContainer/Viewport/SceneRoot/Testobjects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.45, 0)
+mesh = SubResource("BoxMesh_dg77c")
+
+[node name="BoxBlue" type="MeshInstance3D" parent="ViewportContainer/Viewport/SceneRoot/Testobjects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.45, 0)
+mesh = SubResource("BoxMesh_w48qg")
 
 [node name="Menu" parent="." instance=ExtResource("8_xeqp5")]
 

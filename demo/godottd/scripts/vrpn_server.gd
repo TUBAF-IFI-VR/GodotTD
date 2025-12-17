@@ -20,7 +20,8 @@ var rotate_start_device : Quaternion
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	if GodotTD.is_server:
+	if GodotTD.is_server and GodotTD.config["vrpn_system"] != "" and GodotTD.config["vrpn_system"]\
+			!= "none":
 		#base_pos = cave.calibration.eye_default
 		#base_quat = Origin.quaternion
 		print("Initialize tracking...")

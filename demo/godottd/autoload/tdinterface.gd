@@ -4,6 +4,7 @@ class_name TDInterface
 
 # Configuration data
 const config_file = "res://godottd/config/display_config.json"
+const config_default = "res://godottd/config/minimal_config.json"
 var config : Dictionary = {}
 
 # References to essential tiled display components
@@ -33,8 +34,12 @@ func _get_headtracking():
 func _init():
 	var file = FileAccess.open(config_file, FileAccess.READ)
 	if file == null:
-		print("Warning: The config file '"+config_file+"' does not exist!")
-		print("\tYou can ignore this warning if you are testing your scene locally.")
+		print("Warning: The config file '"+config_file+"' does not exist! \
+			\n\tYou can ignore this warning if you are testing your scene locally. \
+			\n\tA minimal default config will be loaded.")
+		file = FileAccess.open(config_default, FileAccess.READ)
+	if file == null:
+		print("Error: Failed to load any config file: %s, %s" % [config_file,config_default])
 		return
 
 	var json = JSON.new()

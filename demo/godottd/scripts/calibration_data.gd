@@ -59,18 +59,27 @@ func calculate_frustum():
 	# TODO: generalization of camera rotation
 	# TODO: generalization of near plane for other tiled displays
 	# X-SITE setup: projectors 0-11 left, 12-17 right, 18-23 front, 24 floor
-	if projector_id < 12:
+	#if projector_id < 12:
+		#wall_focus.x = (tl.z - eye.z) / wall["size"][0]
+		#camera_rotation.y = PI/2
+	#elif projector_id < 18:
+		#wall_focus.x = (eye.z - tl.z) / wall["size"][0]
+		#camera_rotation.y = -PI/2
+	#elif projector_id < 24:
+		#wall_focus.x = (eye.x - tl.x) / wall["size"][0]
+	#elif projector_id == 24:
+		#camera_rotation.x = -PI/2
+		#wall_focus.x = (eye.x - tl.x) / wall["size"][0]
+		#wall_focus.y = (1.0 - (eye.z - tl.z) / wall["size"][1]) - 0.5
+	# Example setup: projectors 0 left, 1 front, 2 right
+	if projector_id < 1:
 		wall_focus.x = (tl.z - eye.z) / wall["size"][0]
 		camera_rotation.y = PI/2
-	elif projector_id < 18:
+	elif projector_id < 2:
+		wall_focus.x = (eye.x - tl.x) / wall["size"][0]
+	elif projector_id < 3:
 		wall_focus.x = (eye.z - tl.z) / wall["size"][0]
 		camera_rotation.y = -PI/2
-	elif projector_id < 24:
-		wall_focus.x = (eye.x - tl.x) / wall["size"][0]
-	elif projector_id == 24:
-		camera_rotation.x = -PI/2
-		wall_focus.x = (eye.x - tl.x) / wall["size"][0]
-		wall_focus.y = (1.0 - (eye.z - tl.z) / wall["size"][1]) - 0.5
 	
 	var left = p1.x
 	if p4.x < left: left = p4.x
@@ -93,14 +102,16 @@ func calculate_frustum():
 	frustum_size.y = 0.5*(bottom-top)*height;
 	
 	# TODO: generalization of near plane for other tiled displays
-	if projector_id < 12:
-		near = -(wall["bounds"]["top_left"][0] - eye.x)
-	elif projector_id < 18:
-		near = wall["bounds"]["top_left"][0] - eye.x
-	elif projector_id < 24:
-		near = -(wall["bounds"]["top_left"][2] - eye.z)
-	else:
-		near = eye.y + 0.01
+	#if projector_id < 12:
+		#near = -(wall["bounds"]["top_left"][0] - eye.x)
+	#elif projector_id < 18:
+		#near = wall["bounds"]["top_left"][0] - eye.x
+	#elif projector_id < 24:
+		#near = -(wall["bounds"]["top_left"][2] - eye.z)
+	#else:
+		#near = eye.y + 0.01
+	near = 0.8
+	
 	near *= near_ratio
 
 # Load calibration data from a JSON file

@@ -1,0 +1,10 @@
+{
+	"calibration_path" : "res://godottd/calibration/",
+	"calibration_file" : "minimal_calibration.json",
+	"server_ip" : "localhost",
+	"server_port" : 55555,
+	"server_max_clients" : 50,
+	"vrpn_system" : "none",
+	"scene_path" : "",
+	"scene_default" : ""
+}

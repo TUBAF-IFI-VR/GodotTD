@@ -16,7 +16,7 @@ void fragment()
 	vec2 uv_alpha = uv_screen;
 
 	uv.x *= resolution.x;
-	uv.y = uv.y * resolution.y;
+	uv.y *= resolution.y;
 
 	vec3 p = vec3(0.0, 0.0, 1.0);
 	p.x = Hx[0][0] + Hx[0][1]*uv.x + Hx[0][2]*uv.y + Hx[1][0]*uv.x*uv.y
@@ -28,7 +28,7 @@ void fragment()
 		+ Hy[2][0]*uv.x*uv.x*uv.y + Hy[2][1]*uv.x*uv.y*uv.y
 		+ Hy[2][2]*uv.x*uv.x*uv.x + Hy[3][0]*uv.y*uv.y*uv.y;
 	p = p*F;
-	p /= p.z;
+	//p /= p.z;
 
 	p.x = p.x - offset.x;
 	p.y = p.y - offset.y;

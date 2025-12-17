@@ -64,17 +64,22 @@ func _init():
 	var wx = 1920
 	var wy = 1080
 	
+	# Remove editor args
+	if args[0] == "--scene":
+		args.remove_at(1)
+		args.remove_at(0)
+	
 	# Window position
-	if( len(args) >= 2 ):
+	if len(args) >= 2:
 		px = float(args[0])
 		py = float(args[1])
 	
 	# Projector id
-	if( len(args) >= 3 ):
+	if len(args) >= 3:
 		projector = int(args[2])
 		
 	# Window size
-	if( len(args) >= 5 ):
+	if len(args) >= 5:
 		wx = int(args[3])
 		wy = int(args[4])
 		
@@ -198,7 +203,7 @@ func _ready():
 		reconnect_timer.timeout.connect(self._client_reconnect)
 		
 	# Finally check whether everything is fine
-	if error_network == OK and peer.get_connection_status() != MultiplayerPeer.CONNECTION_DISCONNECTED:
+	if error_network == OK and peer.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED:
 		print("Network connection established...")
 	else:
 		print("Failed to establish network connection!")

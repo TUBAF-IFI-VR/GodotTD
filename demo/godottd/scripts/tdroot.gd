@@ -134,6 +134,7 @@ func _ready():
 	if is_server:
 		$ViewportContainer/Viewport.size = Vector2(window_width, window_height)
 		material.shader = shader_server
+		DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_ALWAYS_ON_TOP,true)
 		
 	# All cients have to initialze calibration parameters
 	else:
@@ -168,6 +169,7 @@ func _ready():
 		
 		# Finally setup the initial camera frustum
 		update_frustum()
+		DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS,true)
 		
 	### Setup network
 	if test_local:

@@ -28,7 +28,7 @@ void fragment()
 		+ Hy[2][0]*uv.x*uv.x*uv.y + Hy[2][1]*uv.x*uv.y*uv.y
 		+ Hy[2][2]*uv.x*uv.x*uv.x + Hy[3][0]*uv.y*uv.y*uv.y;
 	p = p*F;
-	//p /= p.z;
+	p /= p.z;
 
 	p.x = p.x - offset.x;
 	p.y = p.y - offset.y;

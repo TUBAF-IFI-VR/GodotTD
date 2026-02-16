@@ -34,6 +34,30 @@ func to_vector3(array : Array) -> Vector3:
 func to_vector2(array : Array) -> Vector2:
 	return 	Vector2(array[0], array[1])
 	
+func calculate_orientation_angle(eye_dir:Vector3, v:Vector3) -> Array:
+	var c = eye_dir.cross(v)
+	return [atan2(c.length(), eye_dir.dot(v)),c]
+	
+func calculate_camera_orientation(eye_dir:Vector3, wall_normal:Vector3) -> Vector3:
+	var orientation : Vector3
+	#var proj_xy = Vector3(eye_dir.x, eye_dir.y, 0.0)
+	#var proj_xz = Vector3(eye_dir.x, 0.0, eye_dir.z)
+	var wall_xz = Vector3(wall_normal.x, 0.0, wall_normal.z)
+	var wall_yz = Vector3(0.0, wall_normal.y, wall_normal.z)
+	var res
+	
+	if wall_xz.length() > 0.0:
+		res = calculate_orientation_angle(eye_dir, wall_xz)
+		orientation.y = res[0]
+		if res[1].y < 0.0:
+			orientation.y = -orientation.y
+	if wall_yz.length() > 0.0:
+		res = calculate_orientation_angle(eye_dir, wall_yz)
+		orientation.x = res[0]
+		if res[1].x < 0.0:
+			orientation.x = -orientation.x
+	return orientation
+	
 # Calculate new camera frustum parameters
 func calculate_frustum():
 	# Godot does currently not allow arbitrary frustum setups using vertices
@@ -59,27 +83,26 @@ func calculate_frustum():
 	# TODO: generalization of camera rotation
 	# TODO: generalization of near plane for other tiled displays
 	# X-SITE setup: projectors 0-11 left, 12-17 right, 18-23 front, 24 floor
-	#if projector_id < 12:
-		#wall_focus.x = (tl.z - eye.z) / wall["size"][0]
-		#camera_rotation.y = PI/2
-	#elif projector_id < 18:
-		#wall_focus.x = (eye.z - tl.z) / wall["size"][0]
-		#camera_rotation.y = -PI/2
-	#elif projector_id < 24:
-		#wall_focus.x = (eye.x - tl.x) / wall["size"][0]
-	#elif projector_id == 24:
-		#camera_rotation.x = -PI/2
-		#wall_focus.x = (eye.x - tl.x) / wall["size"][0]
-		#wall_focus.y = (1.0 - (eye.z - tl.z) / wall["size"][1]) - 0.5
-	# Example setup: projectors 0 left, 1 front, 2 right
-	if projector_id < 1:
+	# Calculate camera orientation from display wall normal vector
+	var n = to_vector3(wall["normal"]).normalized()
+	print(n)
+	var eye_dir = Vector3(0,0,1)
+	camera_rotation = calculate_camera_orientation(eye_dir, n)
+	near = 0.8
+	if n.x > 0.0:		# Left wall
 		wall_focus.x = (tl.z - eye.z) / wall["size"][0]
-		camera_rotation.y = PI/2
-	elif projector_id < 2:
-		wall_focus.x = (eye.x - tl.x) / wall["size"][0]
-	elif projector_id < 3:
+		near = -(wall["bounds"]["top_left"][0] - eye.x)
+	elif n.x < 0.0:		# Right wall
 		wall_focus.x = (eye.z - tl.z) / wall["size"][0]
-		camera_rotation.y = -PI/2
+		near = wall["bounds"]["top_left"][0] - eye.x
+	elif n.y > 0.0:		# Floor
+		wall_focus.x = (eye.x - tl.x) / wall["size"][0]
+		wall_focus.y = (1.0 - (eye.z - tl.z) / wall["size"][1]) - 0.5
+		near = eye.y + 0.01
+	else:				# Front wall
+		wall_focus.x = (eye.x - tl.x) / wall["size"][0]
+		near = -(wall["bounds"]["top_left"][2] - eye.z)
+	near *= near_ratio
 	
 	var left = p1.x
 	if p4.x < left: left = p4.x
@@ -100,19 +123,6 @@ func calculate_frustum():
 	frustum_offset = frustum_offset * Vector2(width, height)
 	frustum_size.x = 0.5*(right-left)*width
 	frustum_size.y = 0.5*(bottom-top)*height;
-	
-	# TODO: generalization of near plane for other tiled displays
-	#if projector_id < 12:
-		#near = -(wall["bounds"]["top_left"][0] - eye.x)
-	#elif projector_id < 18:
-		#near = wall["bounds"]["top_left"][0] - eye.x
-	#elif projector_id < 24:
-		#near = -(wall["bounds"]["top_left"][2] - eye.z)
-	#else:
-		#near = eye.y + 0.01
-	near = 0.8
-	
-	near *= near_ratio
 
 # Load calibration data from a JSON file
 func load_calibration(filename : String, new_projector_id : int) -> bool:

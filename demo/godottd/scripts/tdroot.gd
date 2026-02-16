@@ -153,6 +153,8 @@ func _ready():
 			$ViewportContainer/Viewport.size.y = 1080
 		print("viewport new: ", $ViewportContainer/Viewport.size)
 		
+		print("camera orientation: ", calibration.camera_rotation)
+		
 		# Load alphamask and apply all values to the shader
 		var alphamask = calibration.load_alphamask(config["calibration_path"])
 		if !alphamask:

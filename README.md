@@ -43,12 +43,13 @@ Building the Python bindings will fail for VRPN 07.34 and Python >=3.9. You can 
 git submodule update --init --recursive
 ```
 2. Prepare static VRPN libraries for your platform (see [Preparing the VRPN client lib](#preparing-the-vrpn-client-lib))
-3. Run **scons** to build the C++ extension:
+3. Make sure Python 3 is installed and install **SCons** via pip
+4. Run **scons** to build the C++ extension:
 ```Bash
 # For a debug version:
 scons target=template_debug
 ```
-4. Create a display config (demo/godottd/config/display_config.json). See the contained example file for details.
+5. Create a display config (demo/godottd/config/display_config.json). See the contained example file for details.
 
 Depending on the targeted Godot version it may be necessary to checkout the appropriate godot-cpp version. Currently godot-cpp is configured for Godot >=4.5.
 

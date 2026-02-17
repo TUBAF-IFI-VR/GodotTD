@@ -14,10 +14,14 @@ env = SConscript("godot-cpp/SConstruct")
 
 # tweak this if you want to use different folders, or more folders, to store your source code in.
 env.Append(CPPPATH=["godottd-extension/"])
-env.Append(CCFLAGS=["-fexceptions"])
 env.Append(LIBPATH=["godottd-extension/lib/"])
-env.Append(LIBS=["libvrpn.a","libquat.a"])
 sources = Glob("godottd-extension/*.cpp")
+
+if env["platform"] == "windows":
+    env.Append(LIBS=["vrpn.lib","quat.lib"])
+elif env["platform"] == "linux":
+    env.Append(CCFLAGS=["-fexceptions"])
+    env.Append(LIBS=["libvrpn.a","libquat.a"])
 
 if env["platform"] == "macos":
     library = env.SharedLibrary(

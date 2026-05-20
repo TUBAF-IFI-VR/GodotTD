@@ -311,14 +311,20 @@ func load_scene(scene_name:String):
 	if success:
 		# Currently the start scene has to be named demo
 		var imported_scene = load("res://demo.tscn")
-		
+		if not imported_scene:
+			push_warning("Falling back zo main.tscn")
+			imported_scene = load("res://main.tscn")
 		# Cancel scene loading otherwise
 		if not imported_scene:
 			push_error("Failed to load demo.tscn from scene package '"+scene_name+"'!")
 			return
 			
 		# Remove existing scene
-		if scene.has_node("Demo"):
+		var root_name = ""
+		if scene.has_node("Demo"): root_name = "Demo"
+		elif scene.has_node("Main"): root_name = "Main"
+		elif scene.has_node("Node3D"): root_name = "Node3D"
+		if scene.has_node(root_name):
 			var node = scene.get_node("Demo")
 			#if node.has_method("_finish"):
 			#	node._finish()

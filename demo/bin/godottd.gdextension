@@ -5,5 +5,6 @@ compatibility_minimum = 4.5
 
 [libraries]
 
-linux.x86_64="res://bin/libgodottd.linux.template_debug.x86_64.so"
-windows.x86_64="res://bin/libgodottd.windows.template_debug.x86_64.dll"
+linux.debug.x86_64 = "res://bin/libgodottd.linux.template_debug.x86_64.so"
+linux.release.x86_64 = "res://bin/libgodottd.linux.template_release.x86_64.so"
+windows.x86_64 = "res://bin/libgodottd.windows.template_debug.x86_64.dll"

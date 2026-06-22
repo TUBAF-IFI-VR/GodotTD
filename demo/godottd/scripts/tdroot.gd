@@ -312,11 +312,11 @@ func load_scene(scene_name:String):
 		# Currently the start scene has to be named demo
 		var imported_scene = load("res://demo.tscn")
 		if not imported_scene:
-			push_warning("Falling back zo main.tscn")
+			push_warning("Falling back to main.tscn")
 			imported_scene = load("res://main.tscn")
 		# Cancel scene loading otherwise
 		if not imported_scene:
-			push_error("Failed to load demo.tscn from scene package '"+scene_name+"'!")
+			push_error("Failed to load main scene from scene package '"+scene_name+"'!")
 			return
 			
 		# Remove existing scene

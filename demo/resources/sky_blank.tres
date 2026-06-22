@@ -20,6 +20,5 @@ sdfgi_read_sky_light = false
 sdfgi_energy = 3.0
 glow_normalized = true
 glow_bloom = 0.2
-volumetric_fog_enabled = true
 volumetric_fog_density = 0.02
 volumetric_fog_albedo = Color(0.494118, 0.494118, 0.494118, 1)

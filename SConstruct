@@ -23,17 +23,13 @@ elif env["platform"] == "linux":
     env.Append(CCFLAGS=["-fexceptions"])
     env.Append(LIBS=["libvrpn.a","libquat.a"])
 
-if env["platform"] == "macos":
-    library = env.SharedLibrary(
-        "demo/bin/libgodottd.{}.{}.framework/libgodottd.{}.{}".format(
-            env["platform"], env["target"], env["platform"], env["target"]
-        ),
-        source=sources,
-    )
-else:
-    library = env.SharedLibrary(
-        "demo/bin/libgodottd{}{}".format(env["suffix"], env["SHLIBSUFFIX"]),
-        source=sources,
-    )
+# Create the SCons target for the specified platform
+lib_filename = "{}godottd{}{}".format(env.subst('$SHLIBPREFIX'), \
+                env["suffix"], env.subst('$SHLIBSUFFIX'))
+
+library = env.SharedLibrary(
+    "demo/bin/{}".format(lib_filename),
+    source=sources,
+)
 
 Default(library)

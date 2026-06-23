@@ -79,48 +79,79 @@ void VRPNController::_bind_methods() {
    ADD_SIGNAL(MethodInfo("button_pressed", PropertyInfo(Variant::INT, "button"), PropertyInfo(Variant::BOOL, "pressed")));
 }
 
-void VRPNController::_process(float delta) {
+void VRPNController::_process(double delta) {
 
 }
 
 void VRPNController::init(const godot::String& device, const godot::String& hostIP, uint32_t port) {
    // Connect to VRPN
    std::stringstream nic;
-   nic << device.utf8().get_data() << "@" << hostIP.utf8().get_data() << ":" << port;
-   std::cout << nic.str() << std::endl;
-   connection  = std::shared_ptr<vrpn_Connection>(vrpn_get_connection_by_name(nic.str().c_str()));
+   //godot::CharString device_utf8 = device.utf8();
+   //godot::CharString host_utf8 = hostIP.utf8();
+   //godot::UtilityFunctions::print(device);
+   godot::String vrpn_con = godot::vformat("%s@%s:%d", device, hostIP, port);
+
+   try {
+     connection  = std::shared_ptr<vrpn_Connection>(vrpn_get_connection_by_name(vrpn_con.utf8().get_data()));
+   }
+   catch(std::exception &e) {
+     std::cerr << "GodotTD: Catched exception while initzializing VRPN: " << e.what() << std::endl;
+   }
+   catch(...) {
+     std::cerr << "GodotTD: Catched unknown exception while initzializing VRPN." << std::endl;
+   }
 
    // Check state
-   std::string msg = "VRPNController: connecting "+nic.str();
-   if( connection->connected() ) msg += " done!";
-   else msg += " failed!";
-   std::cout << msg << std::endl;
+   godot::String msg = "VRPNController: connecting to "+vrpn_con;
+   if( connection->connected() ) {
+     msg += " was successfull!";
+   }
+   else {
+     msg += " failed!";
+   }
+   godot::UtilityFunctions::print(msg);
 
-   // create the tracker (marker + flystick) component and register the handler
-   this->tracker = std::make_shared<vrpn_Tracker_Remote>(device.utf8().get_data(), connection.get());
-   this->tracker->register_change_handler(this, handle_dtrack_tracker);
+   try {
+     // create the tracker (marker + flystick) component and register the handler
+     this->tracker = std::make_shared<vrpn_Tracker_Remote>(device.utf8().get_data(), connection.get());
+     this->tracker->register_change_handler(this, handle_dtrack_tracker);
 
-   // create the flystick analog stick
-   this->analog = std::make_shared<vrpn_Analog_Remote>(device.utf8().get_data(), connection.get());
-   this->analog->register_change_handler(this, handle_dtrack_analog);
+     // create the flystick analog stick
+     this->analog = std::make_shared<vrpn_Analog_Remote>(device.utf8().get_data(), connection.get());
+     this->analog->register_change_handler(this, handle_dtrack_analog);
 
-   // create the flystick buttons
-   this->button = std::make_shared<vrpn_Button_Remote>(device.utf8().get_data(), connection.get());
-   this->button->register_change_handler(this, handle_dtrack_button);
+     // create the flystick buttons
+     this->button = std::make_shared<vrpn_Button_Remote>(device.utf8().get_data(), connection.get());
+     this->button->register_change_handler(this, handle_dtrack_button);
+   }
+   catch(std::exception &e) {
+     std::cerr << "GodotTD: Catched exception while registering VRPN handlers: " << e.what() << std::endl;
+   }
+   catch(...) {
+     std::cerr << "GodotTD: Catched unknown exception while registering VRPN handlers." << std::endl;
+   }
 }
 
 void VRPNController::poll() {
-   if (tracker)
-      tracker->mainloop();
+   try {
+     if (tracker)
+        tracker->mainloop();
 
-   if (analog)
-      analog->mainloop();
+     if (analog)
+        analog->mainloop();
 
-   if (button)
-      button->mainloop();
+     if (button)
+        button->mainloop();
 
-   if (connection)
-      connection->mainloop();
+     if (connection)
+        connection->mainloop();
+   }
+   catch(std::exception &e) {
+     std::cerr << "GodotTD: Catched exception while polling VRPN devices: " << e.what() << std::endl;
+   }
+   catch(...) {
+     std::cerr << "GodotTD: Catched unknown exception while polling VRPN devices." << std::endl;
+   }
 
    // this blocks rendering :(
    //vrpn_SleepMsecs(20);

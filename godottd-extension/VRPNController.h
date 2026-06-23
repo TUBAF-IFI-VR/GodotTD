@@ -61,7 +61,7 @@ public:
    VRPNController();
    ~VRPNController();
 
-   void _process(float delta);
+   void _process(double delta) override;
 
    void init(const godot::String& Device, const godot::String& HostIP, uint32_t Port = vrpn_DEFAULT_LISTEN_PORT_NO);
    void poll();

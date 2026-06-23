@@ -325,7 +325,7 @@ func load_scene(scene_name:String):
 		elif scene.has_node("Main"): root_name = "Main"
 		elif scene.has_node("Node3D"): root_name = "Node3D"
 		if scene.has_node(root_name):
-			var node = scene.get_node("Demo")
+			var node = scene.get_node(root_name)
 			#if node.has_method("_finish"):
 			#	node._finish()
 			scene.remove_child(node)

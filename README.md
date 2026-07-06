@@ -37,7 +37,7 @@ Building the Python bindings will fail for VRPN 07.34 and Python >=3.9. You can 
 9. Build the Core VRPN Client lib (quat lib will be build as dependency)
 10. Copy vrpn.lib and quat.lib to GodotTD/godottd-extension/lib
 
-## Building and testing the extension
+## Building and running the extension
 1. Clone the repository and update the submodules to add the godot-cpp dependency 
 ```Bash
 git submodule update --init --recursive
@@ -52,6 +52,26 @@ scons target=template_debug
 5. Create a display config (demo/godottd/config/display_config.json). See the contained example file for details.
 
 Depending on the targeted Godot version it may be necessary to checkout the appropriate godot-cpp version. Currently godot-cpp is configured for Godot >=4.5.
+
+### Running a minimal example locally without geometric calibration
+1. Use the provided *minimal_config.json* (and *minimal_calibration.json*) by setting the config file for **TDInterface** in its script file.
+2. Create a simple shell script to start a server and 3 client instances:
+```Bash
+#!/bin/bash
+godot=~/Apps/Godot_v4.6.3-stable_linux.x86_64
+path_demo="GodotTD_4.6_test/demo"
+
+cd $path_demo
+$godot 0 0 0 800 450 0 &
+$godot 800 0 1 800 450 0 &
+$godot 1600 0 2 800 450 0 &
+$godot 1200 450 -1 640 360 0 &
+```
+3. Set the client resolution in the *cave_viewport.material* file to 1x1.
+
+You should get 3 client windows at the top of your screen and the server's window below. Use the right mouse button and WASD keys in the server window to move and rotate the camera as in the Godot editor. The minimal config and calibration will simulate a 3 wall CAVE setup (left, front, right). Camera orientation and frustums will be set accordingly. In this example, the F matrix is just the identity matrix and the non-linear H calibration matrix will be set to a linear scaling of 1 with a 0 offset and 0 for all non-linear coefficients (same for inverse transformations Fi and Hi). As a result, image warping is completely disabled and the rendered images will exactly fill a CAVE screen (see also the screen-space corners in the projector settings of the calibration file).
+
+The extent of the simulated CAVE can be set using the wall bounds in meters. Make sure to adjust normal vector and size as well if necessary. Use the display space corners to specify a client's projection area in screen space coordinates on its associated wall. The camera space corners can be ignored if no geometric calibration is available.
 
 ## Usage
 ### Modification of the demo project
